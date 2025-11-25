@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate
 import java.util.stream.Collectors
 
 @Component
-class HealthChecker(@param:Value("\${upstream.ips}") private val upstreamIps: List<String>, private val restTemplate: RestTemplate) {
+class HealthChecker(@param:Value("#{'\${upstream.ips}'.split(',')}") private val upstreamIps: List<String>, private val restTemplate: RestTemplate) {
     private var healthy = upstreamIps.toList()
 
     fun getHealthy(): List<String> {

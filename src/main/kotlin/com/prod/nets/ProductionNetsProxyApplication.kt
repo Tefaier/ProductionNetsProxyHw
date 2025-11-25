@@ -7,7 +7,10 @@ import org.springframework.scheduling.annotation.EnableScheduling
 
 @SpringBootApplication
 @EnableScheduling
-class ProductionNetsApplication
+@Import(
+    RestTemplateConfiguration::class,
+)
+open class ProductionNetsApplication
 
 fun main(args: Array<String>) {
     runApplication<ProductionNetsApplication>(*args)

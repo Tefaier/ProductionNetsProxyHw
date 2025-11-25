@@ -2,6 +2,7 @@ package com.prod.nets
 
 import org.springframework.http.*
 import org.springframework.stereotype.Component
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -17,19 +18,24 @@ class RoundRobinProxy(private val healthChecker: HealthChecker, private val rest
         originalHeaders: HttpHeaders
     ): Pair<HttpStatusCode, T?> {
         val upstreamIp = nextUpstream
-        if (nextUpstream == null) {
+        if (upstreamIp == null) {
             return HttpStatusCode.valueOf(503) to null
         }
-        val upstreamUrl = "$scheme$upstreamIp$path"
+        val upstreamUrl = "$scheme://$upstreamIp$path"
 
         originalHeaders.contentType = MediaType.APPLICATION_JSON
         originalHeaders.accept = listOf(MediaType.APPLICATION_JSON)
 
         val entity: HttpEntity<Any> = HttpEntity(body, originalHeaders)
 
-        val response = restTemplate.exchange(
-            upstreamUrl, method, entity, responseType
-        )
+        var response: ResponseEntity<T>
+        try {
+            response = restTemplate.exchange(
+                upstreamUrl, method, entity, responseType
+            )
+        } catch (e: RestClientException) {
+            return HttpStatusCode.valueOf(503) to null
+        }
 
         return response.statusCode to response.body
     }
