@@ -15,6 +15,7 @@ class ProxyController(private val proxyService: RoundRobinProxy) {
         request: HttpServletRequest
     ): ResponseEntity<*> {
         val method = HttpMethod.valueOf(request.method)
+        println("Incoming request: ${request.scheme} ${request.requestURI} $method")
 
         try {
             val (code, result) = proxyService.forwardRequest(

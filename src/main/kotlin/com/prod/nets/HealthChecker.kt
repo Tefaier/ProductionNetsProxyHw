@@ -24,8 +24,10 @@ class HealthChecker(@param:Value("#{'\${upstream.ips}'.split(',')}") private val
             val response = restTemplate.getForEntity(
                 "http://$upstream/ping", String::class.java
             )
+            println("Request to $upstream finished with ${response.statusCode}")
             return response.statusCode.is2xxSuccessful
         } catch (e: Exception) {
+            println("Request to $upstream failed")
             return false
         }
     }
