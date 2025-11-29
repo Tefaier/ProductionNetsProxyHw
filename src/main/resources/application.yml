@@ -4,3 +4,7 @@ upstream:
 timeout:
   connection: 1
   response: 3
+#server.ssl.key-store: /app/keystore/keys.p12
+#server.ssl.key-store-password: password
+#server.ssl.key-store-type: PKCS12
+#server.ssl.key-alias: mysslkey
