@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @Import(
     RestTemplateConfiguration::class,
 )
-open class ProductionNetsApplication
+open class ProductionNetsProxyApplication
 
 fun main(args: Array<String>) {
-    runApplication<ProductionNetsApplication>(*args)
+    runApplication<ProductionNetsProxyApplication>(*args)
 }
